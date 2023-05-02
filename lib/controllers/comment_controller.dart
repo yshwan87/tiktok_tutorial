@@ -31,7 +31,7 @@ class CommentController extends GetxController {
   postComment(String commentText) async {
     try {
       if (commentText.isNotEmpty) {
-        DocumentSnapshot userDoc = await firestore.collection('users').doc(authController.user.uid).get();
+        DocumentSnapshot userDoc = await firestore.collection('users').doc(authController.user!.uid).get();
         var allDocs = await firestore.collection('videos').doc(_postId).collection('comments').get();
         int len = allDocs.docs.length;
 
@@ -41,7 +41,7 @@ class CommentController extends GetxController {
           datePublished: DateTime.now(),
           likes: [],
           profilePhoto: (userDoc.data()! as dynamic)['profilePhoto'],
-          uid: authController.user.uid,
+          uid: authController.user!.uid,
           id: 'Comment $len',
         );
         await firestore.collection('videos').doc(_postId).collection('comments').doc('Comment $len').set(
@@ -61,7 +61,7 @@ class CommentController extends GetxController {
   }
 
   likeComment(String id) async {
-    var uid = authController.user.uid;
+    var uid = authController.user!.uid;
     DocumentSnapshot doc = await firestore.collection('videos').doc(_postId).collection('comments').doc(id).get();
 
     if ((doc.data()! as dynamic)['likes'].contains(uid)) {

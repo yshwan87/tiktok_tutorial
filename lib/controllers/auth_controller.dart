@@ -15,7 +15,7 @@ class AuthController extends GetxController {
   late Rx<User?> _user;
 
   File? get profilePhoto => _pickedImage.value;
-  User get user => _user.value!;
+  User? get user => _user.value;
 
   @override
   void onReady() {
@@ -85,7 +85,6 @@ class AuthController extends GetxController {
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
         await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
-        print('log success');
       } else {
         Get.snackbar(
           'Error Logging Account',
@@ -98,5 +97,9 @@ class AuthController extends GetxController {
         e.toString(),
       );
     }
+  }
+
+  void signOut() async {
+    await firebaseAuth.signOut();
   }
 }

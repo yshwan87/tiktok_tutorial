@@ -154,7 +154,7 @@ class VideoScreen extends StatelessWidget {
                                     child: Icon(
                                       Icons.favorite,
                                       size: 40,
-                                      color: data.likes.contains(authController.user.uid) ? Colors.red : Colors.white,
+                                      color: data.likes.contains(authController.user!.uid) ? Colors.red : Colors.white,
                                     ),
                                   ),
                                   const SizedBox(height: 7),
