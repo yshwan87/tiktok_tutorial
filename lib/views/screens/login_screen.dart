@@ -5,11 +5,17 @@ import 'package:tiktok_tutorial/constants.dart';
 import 'package:tiktok_tutorial/views/screens/signup_screen.dart';
 import 'package:tiktok_tutorial/views/widgets/text_input_field.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -72,18 +78,30 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               child: InkWell(
-                onTap: () => authController.loginUser(
-                  _emailController.text,
-                  _passwordController.text,
-                ),
-                child: const Center(
-                  child: Text(
-                    'Login',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
+                onTap: () async {
+                  setState(() {
+                    _isLoading = true;
+                  });
+
+                  await authController.loginUser(
+                    _emailController.text,
+                    _passwordController.text,
+                  );
+
+                  setState(() {
+                    _isLoading = false;
+                  });
+                },
+                child: Center(
+                  child: _isLoading == true
+                      ? const CircularProgressIndicator()
+                      : const Text(
+                          'Login',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                 ),
               ),
             ),
@@ -100,7 +118,7 @@ class LoginScreen extends StatelessWidget {
                 InkWell(
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => SignUpScreen(),
+                      builder: (context) => const SignUpScreen(),
                     ),
                   ),
                   child: Text(

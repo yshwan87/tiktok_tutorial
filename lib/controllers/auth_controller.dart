@@ -27,7 +27,7 @@ class AuthController extends GetxController {
 
   _setInitialScreen(User? user) {
     if (user == null) {
-      Get.offAll(() => LoginScreen());
+      Get.offAll(() => const LoginScreen());
     } else {
       Get.offAll(() => const HomeScreen());
     }
@@ -50,7 +50,7 @@ class AuthController extends GetxController {
     return downloadUrl;
   }
 
-  void registerUser(
+  Future registerUser(
     String username,
     String email,
     String password,
@@ -81,7 +81,7 @@ class AuthController extends GetxController {
     }
   }
 
-  void loginUser(String email, String password) async {
+  Future loginUser(String email, String password) async {
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
         await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);

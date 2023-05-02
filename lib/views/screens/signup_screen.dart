@@ -5,12 +5,18 @@ import 'package:tiktok_tutorial/views/screens/login_screen.dart';
 import '../../constants.dart';
 import '../widgets/text_input_field.dart';
 
-class SignUpScreen extends StatelessWidget {
-  SignUpScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -107,20 +113,33 @@ class SignUpScreen extends StatelessWidget {
                 ),
               ),
               child: InkWell(
-                onTap: () => authController.registerUser(
-                  _usernameController.text,
-                  _emailController.text,
-                  _passwordController.text,
-                  authController.profilePhoto,
-                ),
-                child: const Center(
-                  child: Text(
-                    'Register',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
+                onTap: () async {
+                  setState(() {
+                    _isLoading = true;
+                  });
+
+                  await authController.registerUser(
+                    _usernameController.text,
+                    _emailController.text,
+                    _passwordController.text,
+                    authController.profilePhoto,
+                  );
+                  if (mounted) {
+                    setState(() {
+                      _isLoading = false;
+                    });
+                  }
+                },
+                child: Center(
+                  child: _isLoading == true
+                      ? const CircularProgressIndicator()
+                      : const Text(
+                          'Register',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                 ),
               ),
             ),
@@ -137,7 +156,7 @@ class SignUpScreen extends StatelessWidget {
                 InkWell(
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => LoginScreen(),
+                      builder: (context) => const LoginScreen(),
                     ),
                   ),
                   child: Text(
