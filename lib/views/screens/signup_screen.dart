@@ -1,6 +1,9 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tiktok_tutorial/views/screens/login_screen.dart';
 import '../../constants.dart';
 import '../widgets/text_input_field.dart';
@@ -13,6 +16,17 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  File? _image;
+
+  Future<void> _pickImage() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
@@ -46,16 +60,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             Stack(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 64,
-                  backgroundImage: NetworkImage('https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png'),
-                  backgroundColor: Colors.black,
+                  backgroundImage: _image != null ? FileImage(_image!) : null,
+                  backgroundColor: Colors.grey[500],
+                  child: _image == null
+                      ? Icon(
+                          Icons.person,
+                          size: 80,
+                          color: Colors.grey[800],
+                        )
+                      : null,
                 ),
                 Positioned(
                   bottom: -10,
                   left: 80,
                   child: IconButton(
-                    onPressed: () => authController.pickImage(),
+                    onPressed: () => _pickImage(),
                     icon: const Icon(
                       Icons.add_a_photo,
                     ),
@@ -122,7 +143,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     _usernameController.text,
                     _emailController.text,
                     _passwordController.text,
-                    authController.profilePhoto,
+                    _image,
                   );
                   if (mounted) {
                     setState(() {
