@@ -149,7 +149,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height: 5,
                               ),
                               const Text(
-                                'Likes',
+                                '    Likes   ',
                                 style: TextStyle(
                                   fontSize: 14,
                                 ),

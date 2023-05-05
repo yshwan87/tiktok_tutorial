@@ -58,6 +58,11 @@ class AuthController extends GetxController {
           uid: cred.user!.uid,
         );
         await firestore.collection('users').doc(cred.user!.uid).set(user.toJson());
+      } else if (image == null) {
+        Get.snackbar(
+          'Error Creating Account',
+          'Please put the profile image',
+        );
       } else {
         Get.snackbar(
           'Error Creating Account',
